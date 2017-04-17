@@ -1,0 +1,45 @@
+This is Phantom Package 1.0.
+
+The files it contains are:
+
+    INSTALL		- this text
+    LICENSE		- copy of the GNU license
+    Makefile		- the makefile
+    README		- a description of the cipher
+    filecrypt.c		- a UNIX file encryption utility that uses Phantom
+    phantom.c		- the phantom encryption module
+    phantom.h		- header file allowing phantom.c to be incorporated
+    			  into C programs
+
+
+Compilation of the C sources requires an implementation of ANSI/ISO C.
+Compilation of filecrypt.c additionally requires a POSIX.1 implementation.
+
+There may be difficulties compiling the sources on outdated UNIX versions
+whose bundled compilers don't support ANSI C or which don't have POSIX.1 or
+ANSI C compliant libraries.
+
+The Makefile is a three-liner  which assumes that you have the GNU C compiler.
+Edit the Makefile as appropriate and then type ``make''. An executable
+called ``phantom'' should result. This is the UNIX utility for enciphering
+and deciphering files.
+
+To use Phantom in existing ANSI C programs, simply copy phantom.c and phantom.h
+into the directory where your project resides. Include the phantom.h header
+file in any translation unit which needs to refer to a Phantom function or
+data type. Compile and link the phantom.c file along with the other source
+files of your project.
+
+The filecrypt.c program may serve as a programming example.
+
+The phantom.c also contains a main() function for testing purposes. This
+is enabled by defining the TEST_MAIN preprocessor symbol prior to compiling
+phantom.c.
+
+IMPORTANT:
+
+Phantom is configured for 16 rounds. To increase the number of rounds
+(to a maximum of 32) edit the #define ROUNDS 16 line in phantom.c.
+I wouldn't go lower than 8, 32 rounds probably give significantly better
+protection than 16, at a performance penalty.
+

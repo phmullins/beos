@@ -1,0 +1,197 @@
+		      Description of Phantom Block Cipher
+				 by Kaz Kylheku
+				 <kaz@cafe.net>
+
+Overview
+
+    Phantom is Feistel cipher which operates on 128 bit cipherblocks, and
+kas a key size of 256 bits. It has 16 8-to-8 invertible S-boxes which
+implementations are permitted to customize.  Phantom was inspired by the Soviet
+government standard (GOST 28147-89) cipher, and bears many similarities to it.
+
+
+Mechanisms
+
+    In Phantom, the 256 bits of key material is broken into eight 32-bit
+quantities, which are numbered 0 through 7, with component 0 being the least
+significant.  The input to a round is broken into two 64 bit halves,
+denoted L and R.  One round of Phantom looks like this:
+
+    L_new = R
+    R_new = L xor Leftrotate(Sbox(Combine(R,K)))
+
+L_new and R_new stand for the newly computed L and R which serve as inputs
+to the next round. After the last round, L and R are swapped.
+
+The function Combine mixes the 64 bit block R with  64 bits of key
+material. It does this by breaking both into four 16 bit quantities,
+and then multiplying corresponding pieces of R and K modulo 65537. 
+Prior to the multiplication, zero values of R or K are mapped to 65536.
+After the multiplication, 65536 is mapped back to zero. The four resulting
+16 bit quanties are concatenated together to form a 64 bit result.
+
+The function Sbox takes the 64 bit result of Combine, breaks it into 
+eight 8 bit pieces and passes each through a different S-box. The results
+are concatenated to form a 64 bit result.
+
+Finally, Leftrotate performs a 19 bit circular shift to the left on the whole
+64 bit word.
+
+
+    +-----32-----+    +--16---+--16---+--16---+--16---+    +---16---+---16---+
+    | L          |    | R     |       |       |       |    |  K_x   |        |
+    +------------+    +---+---+---+---+---+---+---+---+    +----+---+----+---+
+           |              |       |   |   |       |             |        |
+           |       +------|-------|---+   |       |             |        |
+           |       |      |       |       |       |             |        |
+           |       |    (combine)-------------------------------+        |
+           |       |      |       |       |       |                      |
+           |       |      |     (combine)--------------------------------+
+           |       |      |       |       |       |
+           |       |      |       |       |       |       +---16---+---16---+
+           |       |      |       |     (combine)---------+  K_y   |        | 
+           |       |      |       |       |       |       +--------+-----+--+
+           |       |      |       |       |       |                      |
+           |       |      |       |       |     (combine)----------------+
+           |       |      |       |       |       | 
+           |       |      v       v       v       v         K_x and K_y
+           |       |  +-8-+-8-+-8-+-8-+-8-+-8-+-8-+-8-+     chosen in accor-
+           |       |  |   |   |   |   |   |   |   |   |     dance with schedule
+           |       |  +---+---+---+---+---+---+---+---+
+           |       |    |   |   |   |   |   |   |   | 
+           |       |   (S7)(S6)(S5)(S4)(S3)(S2)(S1)(S0)   <- S15 to S8 in
+           |       |    |   |   |   |   |   |   |   |        odd rounds
+           |       |    +---+---+---+-+-+---+---+---+
+           |       |                  |
+           |       |                (rot)
+           |       |                  |
+           +-------|----------------(xor)
+                   |                  |
+                   v                  v
+    +----------------+       +----------------+
+    | L_new          |       | R_new          |
+    +----------------+       +----------------+
+
+
+
+Scheduling
+
+There are 16 implementation-defined S-boxes in Phantom (the reference
+implementation provides a default set which were randomly generated).
+But in any given round, only 8 of these boxes are used. The choice is
+straight-forward. Rounds 0, 2, 4, ..., 30 use S-boxes 0 to 7.
+Rounds 1, 3, 5, ..., 31 use S-boxes 8 to 15. The lowest numbered S-Box
+is used for the least significant octet.
+
+The key material is scheduled by choosing various pairs of 32 bit pieces (from
+the total set of eight) and concatenating these pairs to form 64 bit results.
+The choices are made done according to the following table:
+
+	Round	Pair		Round	Pair
+	0	0, 4		16	0, 4
+	1	1, 5		17	3, 7
+	2	2, 6		18	1, 5
+	3	3, 7		19	2, 6
+	4	1, 0		20	1, 3
+	5	3, 2		21	5, 7
+	6	5, 4		22	4, 6
+	7	7, 6		23	0, 2
+	8	0, 4		24	1, 0
+	9	5, 1		25	2, 3
+	10	2, 6		26	5, 4
+	11	7, 3		27	6, 7
+	12	7, 6		28	7, 6
+	13	5, 4		29	5, 4
+	14	3, 2		30	3, 2
+	15	1, 0		31	1, 0
+
+In the concatenation of these pairs, the left constituent becomes the most
+significant word.
+
+
+Diffusion
+
+In the diagram below, the effect of 1 bit in the input text is traced
+through four rounds. In each round, its effect through four operations
+is shown: M stands for the multiplicative combination, S for the S-box
+substitution, and R for the left rotation by 19 bits.
+
+       63               47               31               15              0
+     1: ---------------- ---------------- ---------------- ---------------* 
+     M: ---------------- ---------------- ---------------- **************** 
+     S: ---------------- ---------------- ---------------- **************** 
+     R: ---------------- -------------*** *************--- ---------------- 
+
+     2: ---------------- -------------*** *************--- ---------------- 
+     M: ---------------- **************** **************** ---------------- 
+     S: ---------------- **************** **************** ---------------- 
+     R: **************** *************--- ---------------- -------------*** 
+
+     3: **************** *************--- ---------------- -------------*** 
+     M: **************** **************** ---------------- **************** 
+     S: **************** **************** ---------------- **************** 
+     R: *************--- -------------*** **************** **************** 
+
+     4: *************--- -------------*** **************** **************** 
+     M: **************** **************** **************** **************** 
+     S: **************** **************** **************** **************** 
+     R: **************** **************** **************** **************** 
+
+
+The asterisks show bits that are affected, dashes represent bits that
+are unaffected.
+
+This diagram shows the most optimistic case: the multiplications and
+subsitutions are assumed to act as fully spreading the effect of the
+bit change to all their output bits. If this is the case, a one bit
+change in the input affects all 64 bits after just four rounds.
+
+For the worst case, suppose that a key piece happens to be 1, and 
+the S-boxes are identities. In that case, a one bit change in the input
+to the cipher round will affect only one bit of output.
+
+The following diagram assumes an intermediate case, involving a degenerate key,
+but ``good'' S-boxes that spread the effect of one bit to all eight outputs:
+
+       63               47               31               15              0
+     1: ---------------- ---------------- ---------------- ---------------* 
+     M: ---------------- ---------------- ---------------- ---------------* 
+     S: ---------------- ---------------- ---------------- --------******** 
+     R: ---------------- ---------------- -----********--- ---------------- 
+
+     2: ---------------- ---------------- -----********--- ---------------- 
+     M: ---------------- ---------------- -----********--- ---------------- 
+     S: ---------------- ---------------- **************** ---------------- 
+     R: -------------*** *************--- ---------------- ---------------- 
+
+     3: -------------*** *************--- ---------------- ---------------- 
+     M: -------------*** *************--- ---------------- ---------------- 
+     S: --------******** **************** ---------------- ---------------- 
+     R: *************--- ---------------- ---------------- -----*********** 
+
+     4: *************--- ---------------- ---------------- -----*********** 
+     M: *************--- ---------------- ---------------- -----*********** 
+     S: **************** ---------------- ---------------- **************** 
+     R: ---------------- -------------*** **************** *************--- 
+
+The ``avalanche'' now consumes only 8 bits per round, rather than 16, meaning
+that an additional four rounds is needed to spread the effect to the full word
+(32 unaffected bits remain after four rounds). This suggests that Phantom
+should be used with no fewer than 8 rounds, assuming well behaved S-boxes.
+
+In practice, degenerate S-boxes (as well as S-boxes that are weak) can be
+avoided by careful choice.   One way of avoiding degenerate keys is to examine
+the generated key for the presence of weak subkeys and modify it in a
+systematic way.
+
+
+Hashing Functions
+
+The Phantom cipher is accompanied by two hashing functions. One produces a 128
+bit hash value, the same size as a cipher block. This is suitable for things
+like initial vectors for the cipher block chaining mode or cipher feedback
+mode of operation.  The other produces a 256 bit hash value, and is suitable
+for producing a key from a pass phrase. These algorithms are, respectively,
+Modified Davis Meyer (which is a version of the Davis Meyer algorithm modified
+to work with ciphers whose key size is twice the block size) and Abreast Davis
+Meyer.  Both use the Phantom cipher, of course.

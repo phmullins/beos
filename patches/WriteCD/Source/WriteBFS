@@ -1,0 +1,10 @@
+#!/bin/sh
+
+alert  "ARE YOU SURE? IF YOU DON'T WANT TO MAKE A CD, TAKE OUT THE BLANK CD!"
+
+chmod -w /boot/home/image.img
+cdrecord -v dev=$CDRPOS speed=$CDRSPD -data /boot/home/image.img 
+chmod +w /boot/home/image.img
+
+
+sleep 60

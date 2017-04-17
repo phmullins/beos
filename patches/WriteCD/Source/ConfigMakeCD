@@ -1,0 +1,14 @@
+#!/bin/sh
+
+#get user input
+cdrecord -scanbus
+echo ""
+echo "Locate your CD-R device in the table listed above"
+read -p "Please enter the 3 digit device ID, I.E. 9,1,0  : " devicepos
+read -p "Please enter the desired write speed. I.E. 1 2 4 8... : " devicespeed
+#store the input for future use
+echo "export CDRPOS=$devicepos" >> /boot/home/.profile
+echo "export CDRSPD=$devicespeed" >> /boot/home/.profile
+
+echo ""
+read -p "Please press enter to quit. You may now run MakeCD"
