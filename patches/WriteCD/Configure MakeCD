@@ -1,5 +1,0 @@
-#!/bin/sh
-
-#script used to aid in configuring the cd burning software.  Launches the actual script into a terminal
-
-Terminal -t "WriteCD Configuration" /boot/home/config/bin/ConfigMakeCD

@@ -1,3 +1,0 @@
-#!/bin/sh
-dd if=/dev/zero of=/boot/home/image.img bs=1024k count=640
-mkbfs 2048 /boot/home/image.img
