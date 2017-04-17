@@ -20,22 +20,20 @@ Thanks to Scot Hacker for helping me work out some bugs!
 
 ### Version History
 
-v0.03 - BeDisk now creates and mounts containers in any folder.
-v0.02 - Fixed missing icons in list view. Added better warning to MakeBeDisk.
-v0.01 - Initial release.
+- v0.03 - BeDisk now creates and mounts containers in any folder.
+- v0.02 - Fixed missing icons in list view. Added better warning to MakeBeDisk.
+- v0.01 - Initial release.
 
 ### Future Plans
 
-1.) Ability to encrypt and decrypt containers. Cyphers might include Idea, Ghost, Triple-DES, Blowfish or Twofish.
-2.) Some kind of basic password protection scheme.
-3.) Create any size container you want without editing the source file.
-4.) Choose what container you want mounted.
-5.) Choose a name for a new container.
-6.) Basic error checking.
+- 1.) Ability to encrypt and decrypt containers. Cyphers might include Idea, Ghost, Triple-DES, Blowfish or Twofish.
+- 2.) Some kind of basic password protection scheme.
+- 3.) Create any size container you want without editing the source file.
+- 4.) Choose what container you want mounted.
+- 5.) Choose a name for a new container.
+- 6.) Basic error checking.
 
-Note: Adding password protection or the ability to encrypt the container requires direct input from the user. Basic shell scripting has no
-way of gaining that input except through the Terminal application. I might hold off on these features until I find a way of getting the input
-from a BeOS `messagebox` or something similar to the alert command.
+Note: Adding password protection or the ability to encrypt the container requires direct input from the user. Basic shell scripting has no way of gaining that input except through the Terminal application. I might hold off on these features until I find a way of getting the input from a BeOS `messagebox` or something similar to the alert command.
 
 ### Author
 Created by [Patrick H. Mullins](http://www.pmullins.net). You can find me on  [Twitter](https://twitter.com/phmullins) and on [Telegram](https://telegram.org/) as @pmullins.
