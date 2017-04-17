@@ -1,0 +1,7 @@
+#!/bin/sh
+echo "Please type the exact path to the image. I.E. /boot/home/myimage.iso"
+read -p "The path: " imagepath #read in the path + name
+chmod -w $imagepath
+cdrecord -v dev=$CDRPOS speed=$CDRSPD -data $imagepath
+chmod +w $imagepath
+sleep 600
