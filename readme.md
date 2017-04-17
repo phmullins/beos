@@ -13,18 +13,19 @@ BeOS applications that I have written in either Pythin or C++.
 
 These are applications that I have downloaded from the Internet and had to patch to get them working with BeOS.
 
-* [WriteCD](patches/WriteCD) - A set of scripts that allow you to burn CDs under BeOS. The original archive was missing a crucial file (MakeBFS) which allows you to create BFS formatted CD's. I created the MakeBFS script and included MakeBFS in this archive.
+* [WriteCD](patches/WriteCD) - A set of scripts that allow you to burn CDs under BeOS. The original archive was missing a crucial file (MakeBFS) which allows you to create BFS formatted CD's. I created the MakeBFS script and included it in this archive.
 
 ### Application Ports
 
 These are applications that I've ported to BeOS. Most of these are Terminal-based applications. I plan on adding GUI wrapper interfaces to some of these.
 
 * [BxDMS](ports/xDMS) - Converts DMS archives to ADF files.
-* [Enigma](ports/benigma) - German Enigma encryption cipher.
-* [Lucifer](ports/blucifer) - IBM's Lucifer encryption cipher.
-* [Phantom](ports/bphantom) - The Phantom (Based on GOST) random block encryption cipher.
-* [Wancrypt](ports/bwancrypt) - One-Time Pad encryption cipher.
-* [Idea](ports/idea) - Port of the IDEA encryption cipher.  
+* [Enigma](ports/enigma) - German Enigma encryption cipher.
+* [Idea](ports/idea) - International Data Encryption Algorithm.
+* [Lucifer](ports/lucifer) - IBM's Lucifer encryption cipher.
+* [Phantom](ports/phantom) - The Phantom (Based on GOST) random block encryption cipher.
+* [Wancrypt](ports/wancrypt) - One-Time Pad encryption cipher.
+
 
 ### Author
 Created by [Patrick H. Mullins](http://www.pmullins.net). You can find me on  [Twitter](https://twitter.com/phmullins) and on [Telegram](https://telegram.org/) as @pmullins.
