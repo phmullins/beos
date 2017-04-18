@@ -4,7 +4,7 @@ Here you will find applications for [BeOS](https://en.wikipedia.org/wiki/BeOS)/[
 
 ### BeOS Applications
 
-BeOS applications that I have written in either Pythin or C++.
+BeOS applications that I have written in either Python or C++.
 
 * [BIdea](/applications/bidea) - A Python front-end for the Idea encryption algorithm.
 * [BeDisk](/applications/bedisk) - This is a PGP Disk clone. It will create a BeOS hardfile container and then mount it as if it were a normal hard drive. I created this in one night, so don't too expect from it. I plan on eventually adding container encryption and context-menu integration.
